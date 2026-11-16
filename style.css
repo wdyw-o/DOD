@@ -1,0 +1,874 @@
+/* ============================================================
+   1. ПЕРЕМЕННЫЕ И СБРОС
+   ============================================================ */
+:root {
+  --yellow: #ffc107;
+  --yellow-dark: #f9a825;
+  --yellow-light: #fff8e1;
+  --dark: #1a1a1a;
+  --gray: #6b6b6b;
+  --light: #fafafa;
+  --white: #ffffff;
+  --radius: 14px;
+  --shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  --transition: 0.25s ease;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+body {
+  overflow-x: hidden;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: var(--dark);
+  background: var(--white);
+  line-height: 1.6;
+  padding-top: 108px; /* отступ под фиксированную шапку */
+  transition: padding-top 0.3s ease;
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* ============================================================
+   2. ШАПКА (fixed)
+   ============================================================ */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+.header.scrolled {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border-bottom-color: transparent;
+}
+
+.header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  gap: 24px;
+  transition: padding 0.3s ease;
+}
+
+/* БРЕНД: лого + название */
+.header__brand {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  text-decoration: none;
+  color: var(--dark);
+  flex-shrink: 0;
+}
+
+.header__logo {
+  width: 84px;
+  height: 84px;
+  object-fit: contain;
+  border-radius: 16px;
+  background: var(--white);
+  padding: 6px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.header__titles {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+
+.header__title-main {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  color: var(--dark);
+  transition: font-size 0.3s ease;
+}
+
+.header__title-sub {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--gray);
+  margin-top: 3px;
+  transition: font-size 0.3s ease;
+}
+
+/* Сжатая шапка при скролле */
+.header.scrolled .header__logo {
+  width: 60px;
+  height: 60px;
+  padding: 4px;
+}
+
+.header.scrolled .header__title-main {
+  font-size: 17px;
+}
+.header.scrolled .header__title-sub {
+  font-size: 12px;
+}
+.header.scrolled .header__inner {
+  padding: 8px 20px;
+}
+
+/* НАВИГАЦИЯ (pill-кнопки на серой подложке) */
+.nav {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  background: #f5f5f5;
+  padding: 6px;
+  border-radius: 14px;
+}
+
+.nav a {
+  text-decoration: none;
+  color: var(--gray);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 14px;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+  position: relative;
+  white-space: nowrap;
+}
+
+.nav a:hover {
+  color: var(--dark);
+  background: var(--white);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+.nav a.active {
+  color: var(--dark);
+  background: var(--white);
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.nav a:visited {
+  color: var(--gray);
+}
+.nav a:active {
+  color: var(--dark);
+}
+
+/* CTA-кнопка в шапке */
+.header__cta {
+  padding: 10px 20px;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+/* БУРГЕР */
+.burger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 36px;
+  height: 36px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+}
+
+.burger span {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: var(--dark);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.burger.active span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.burger.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.burger.active span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* МОБИЛЬНОЕ МЕНЮ */
+.mobile-menu {
+  display: none;
+  flex-direction: column;
+  padding: 16px 20px 24px;
+  background: var(--white);
+  border-top: 1px solid #eee;
+  gap: 4px;
+}
+
+.mobile-menu.open {
+  display: flex;
+}
+
+.mobile-menu a {
+  text-decoration: none;
+  color: var(--dark);
+  font-size: 16px;
+  font-weight: 500;
+  padding: 12px 16px;
+  border-radius: 10px;
+  transition: background 0.2s;
+}
+
+.mobile-menu a:hover {
+  background: var(--yellow-light);
+}
+
+.mobile-menu .btn {
+  margin-top: 8px;
+  text-align: center;
+}
+
+/* ============================================================
+   3. КНОПКИ
+   ============================================================ */
+.btn {
+  display: inline-block;
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 15px;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition);
+  font-family: inherit;
+}
+
+.btn--primary {
+  background: var(--yellow);
+  color: var(--dark);
+}
+
+.btn--primary:hover {
+  background: var(--yellow-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(255, 193, 7, 0.4);
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--dark);
+  border: 2px solid var(--dark);
+}
+
+.btn--ghost:hover {
+  background: var(--dark);
+  color: var(--white);
+}
+
+.btn--large {
+  padding: 16px 32px;
+  font-size: 17px;
+  width: 100%;
+}
+
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ============================================================
+   4. HERO
+   ============================================================ */
+.hero {
+  background: linear-gradient(135deg, var(--yellow-light) 0%, #fff 100%);
+  padding: 80px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  top: -100px;
+  right: -100px;
+  width: 400px;
+  height: 400px;
+  background: var(--yellow);
+  opacity: 0.15;
+  border-radius: 50%;
+}
+
+.hero__badge {
+  display: inline-block;
+  background: var(--white);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gray);
+  margin-bottom: 20px;
+  border: 1px solid #eee;
+}
+
+.hero__title {
+  font-size: 52px;
+  line-height: 1.1;
+  font-weight: 800;
+  margin-bottom: 20px;
+  max-width: 900px;
+}
+
+.hero__accent {
+  color: var(--yellow-dark);
+}
+
+.hero__subtitle {
+  font-size: 19px;
+  color: var(--gray);
+  max-width: 720px;
+  margin-bottom: 32px;
+}
+
+.hero__actions {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* ============================================================
+   5. АДРЕС
+   ============================================================ */
+.address {
+  padding: 60px 0;
+  background: var(--light);
+}
+
+.address__inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.address__card {
+  background: var(--white);
+  padding: 28px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.address__icon {
+  font-size: 36px;
+}
+.address__title {
+  font-size: 20px;
+  margin-bottom: 6px;
+}
+.address__text {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.address__street {
+  color: var(--gray);
+  margin-bottom: 8px;
+}
+.address__meta {
+  font-size: 14px;
+  color: var(--gray);
+}
+
+/* ============================================================
+   6. СЕКЦИИ (общее)
+   ============================================================ */
+section {
+  padding: 80px 0;
+}
+
+.section-title {
+  font-size: 36px;
+  font-weight: 800;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.section-subtitle {
+  text-align: center;
+  color: var(--gray);
+  font-size: 17px;
+  margin-bottom: 48px;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ============================================================
+   7. ГАЛЕРЕЯ
+   ============================================================ */
+.gallery {
+  background: var(--white);
+}
+
+.gallery__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.gallery__item {
+  border-radius: var(--radius);
+  overflow: hidden;
+  position: relative;
+  aspect-ratio: 4/3;
+  box-shadow: var(--shadow);
+}
+
+.gallery__item--wide {
+  grid-column: span 2;
+}
+
+.gallery__item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s;
+}
+
+.gallery__item:hover img {
+  transform: scale(1.05);
+}
+
+.gallery__item figcaption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+  color: white;
+  padding: 20px 16px 14px;
+  font-size: 14px;
+}
+
+/* ============================================================
+   8. TIMELINE (Один день)
+   ============================================================ */
+.day {
+  background: var(--yellow-light);
+}
+
+.timeline {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.timeline__item {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 24px;
+  padding: 24px 0;
+  border-bottom: 1px dashed rgba(0, 0, 0, 0.1);
+}
+
+.timeline__item:last-child {
+  border: none;
+}
+
+.timeline__time {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--yellow-dark);
+}
+
+.timeline__content h3 {
+  font-size: 18px;
+  margin-bottom: 6px;
+}
+.timeline__content p {
+  color: var(--gray);
+}
+
+/* ============================================================
+   9. ФАКТЫ
+   ============================================================ */
+.facts__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.fact-card {
+  background: var(--light);
+  padding: 32px;
+  border-radius: var(--radius);
+  border-top: 4px solid var(--yellow);
+}
+
+.fact-card__icon {
+  font-size: 40px;
+  margin-bottom: 16px;
+}
+.fact-card h3 {
+  font-size: 20px;
+  margin-bottom: 16px;
+}
+
+.fact-card ul {
+  list-style: none;
+}
+
+.fact-card li {
+  padding: 8px 0 8px 24px;
+  position: relative;
+  font-size: 15px;
+}
+
+.fact-card li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: var(--yellow-dark);
+  font-weight: 700;
+}
+
+.fact-card__big {
+  font-size: 42px;
+  font-weight: 800;
+  color: var(--yellow-dark);
+  margin: 12px 0;
+}
+
+.fact-card__note {
+  font-size: 13px;
+  color: var(--gray);
+  margin-top: 12px;
+}
+
+/* ============================================================
+   10. ШАГИ ПОСТУПЛЕНИЯ
+   ============================================================ */
+.steps {
+  background: var(--light);
+}
+
+.steps__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.step {
+  background: var(--white);
+  padding: 28px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  position: relative;
+}
+
+.step__num {
+  font-size: 48px;
+  font-weight: 800;
+  color: var(--yellow);
+  line-height: 1;
+  margin-bottom: 12px;
+}
+
+.step h3 {
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+.step p {
+  color: var(--gray);
+  font-size: 14px;
+}
+
+/* ============================================================
+   11. КВИЗ
+   ============================================================ */
+.quiz {
+  background: linear-gradient(135deg, #fff 0%, var(--yellow-light) 100%);
+}
+
+.quiz__wrapper {
+  max-width: 720px;
+  margin: 0 auto;
+  background: var(--white);
+  padding: 40px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.quiz__title {
+  font-size: 28px;
+  text-align: center;
+  margin-bottom: 8px;
+}
+.quiz__subtitle {
+  text-align: center;
+  color: var(--gray);
+  margin-bottom: 32px;
+}
+
+.quiz__progress {
+  height: 6px;
+  background: #eee;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 8px;
+  position: relative;
+}
+
+.quiz__progress-bar {
+  height: 100%;
+  background: var(--yellow);
+  width: 0%;
+  transition: width 0.3s;
+}
+
+.quiz__progress-text {
+  font-size: 13px;
+  color: var(--gray);
+  margin-bottom: 24px;
+}
+
+.quiz__question {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.quiz__options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.quiz__option {
+  padding: 14px 18px;
+  border: 2px solid #eee;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all var(--transition);
+  font-size: 15px;
+}
+
+.quiz__option:hover {
+  border-color: var(--yellow);
+  background: var(--yellow-light);
+}
+
+.quiz__option.selected {
+  border-color: var(--yellow-dark);
+  background: var(--yellow-light);
+  font-weight: 600;
+}
+
+.quiz__footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 32px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.quiz__result {
+  text-align: center;
+  padding: 20px 0;
+}
+.quiz__result-emoji {
+  font-size: 64px;
+  margin-bottom: 16px;
+}
+.quiz__result-title {
+  font-size: 24px;
+  margin-bottom: 12px;
+}
+.quiz__result-text {
+  color: var(--gray);
+  margin-bottom: 24px;
+  line-height: 1.7;
+}
+
+/* ============================================================
+   12. ЗАПИСЬ НА ДОД
+   ============================================================ */
+.signup {
+  background: var(--dark);
+  color: var(--white);
+}
+.signup .section-title {
+  color: var(--white);
+}
+.signup .section-subtitle {
+  color: #ccc;
+}
+
+.signup__info {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  flex-wrap: wrap;
+  margin-bottom: 32px;
+  font-size: 16px;
+}
+
+.signup__form {
+  max-width: 500px;
+  margin: 0 auto;
+  display: grid;
+  gap: 12px;
+}
+
+.signup__form input {
+  padding: 14px 18px;
+  border: 1px solid #444;
+  background: #2a2a2a;
+  color: var(--white);
+  border-radius: 10px;
+  font-size: 15px;
+  font-family: inherit;
+}
+
+.signup__form input:focus {
+  outline: none;
+  border-color: var(--yellow);
+}
+
+/* ============================================================
+   13. ФУТЕР
+   ============================================================ */
+.footer {
+  background: #111;
+  color: #aaa;
+  padding: 40px 0;
+}
+
+.footer__inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+}
+
+.footer .logo {
+  color: var(--white);
+  margin-bottom: 8px;
+}
+
+/* ============================================================
+   14. АДАПТИВ
+   ============================================================ */
+@media (max-width: 1024px) {
+  .nav {
+    display: none;
+  }
+  .header__cta {
+    display: none;
+  }
+  .burger {
+    display: flex;
+  }
+}
+
+@media (max-width: 900px) {
+  .hero__title {
+    font-size: 36px;
+  }
+
+  .address__inner,
+  .facts__grid,
+  .steps__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .gallery__grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .gallery__item--wide {
+    grid-column: span 2;
+  }
+
+  .footer__inner {
+    grid-template-columns: 1fr;
+  }
+
+  .timeline__item {
+    grid-template-columns: 80px 1fr;
+    gap: 16px;
+  }
+
+  .quiz__wrapper {
+    padding: 24px;
+  }
+
+  section {
+    padding: 50px 0;
+  }
+  .section-title {
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 500px) {
+  .hero__title {
+    font-size: 28px;
+  }
+
+  .gallery__grid {
+    grid-template-columns: 1fr;
+  }
+  .gallery__item--wide {
+    grid-column: span 1;
+  }
+
+  .signup__info {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .header__logo {
+    width: 64px;
+    height: 64px;
+    border-radius: 14px;
+    padding: 5px;
+  }
+  .header.scrolled .header__logo {
+    width: 50px;
+    height: 50px;
+  }
+  .header__title-main {
+    font-size: 16px;
+  }
+  .header__title-sub {
+    font-size: 12px;
+  }
+  .header__brand {
+    gap: 12px;
+  }
+}
